@@ -16,14 +16,24 @@ void mostrarNombres(char *nombres){
     printf("Nombre: %s\n", nombres);
 }
 
-char *buscarNombre(char palabraClave[], char **arregloNombres, int n){
+char *BuscaNombrePorPalabra(char palabraClave[], char **arregloNombres, int n){
     printf("\nNombres que contienen '%s':\n", palabraClave);
     for (int i = 0; i < n; i++) {
         if (strstr(arregloNombres[i], palabraClave) != NULL) {
             return arregloNombres[i];
         }
     }
-    return ("-1"); // Retorna -1 si no se encuentra ningún nombre que contenga la palabra clave
+    return ("-1");
+}
+
+void BuscaNombrePorId(int n, int tama, char *arregloNombres[]){
+    if(n < tama){
+        printf("\nNombre encontrado: %s\n", arregloNombres[n]);
+        getchar();
+    }else{
+        printf("\nNo se encontro el valor buscado");
+        getchar();
+    }
 }
 
 int main(){
@@ -38,15 +48,26 @@ int main(){
         mostrarNombres(arregloNombres[i]);
     }
 
+    // Buscar por palabra clave
     char palabraClave[50];
     printf("\nIngrese la palabra clave a buscar: ");
     fgets(palabraClave, sizeof(palabraClave), stdin);
-    palabraClave[strcspn(palabraClave, "\n")] = '\0'; // limpiar \n
-    char *resultado= buscarNombre(palabraClave, arregloNombres, N);
-    printf("%s\n", resultado);
-    getchar(); // Esperar a que el usuario presione Enter
+    palabraClave[strcspn(palabraClave, "\n")] = '\0';
+    char *resultado = BuscaNombrePorPalabra(palabraClave, arregloNombres, N);
+    if(resultado != NULL){
+        printf("Nombre encontrado: %s\n", resultado);
+    } else {
+        printf("No se encontro ningún nombre con esa palabra clave\n");
+    }
+    getchar();
 
-    // Liberar memoria al final
+    // Buscar por ID
+    int num;
+    printf("\nIngrese el numero del nombre que desea buscar (0-%d): ", N-1);
+    scanf("%d", &num);
+    fflush(stdin);
+    BuscaNombrePorId(num, N, arregloNombres);
+
     for(int i = 0; i < N; i++){
         free(arregloNombres[i]);
     }
