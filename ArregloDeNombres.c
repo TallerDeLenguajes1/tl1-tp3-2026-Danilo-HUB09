@@ -48,28 +48,40 @@ int main(){
         mostrarNombres(arregloNombres[i]);
     }
 
-    // Buscar por palabra clave
-    char palabraClave[50];
-    printf("\nIngrese la palabra clave a buscar: ");
-    fgets(palabraClave, sizeof(palabraClave), stdin);
-    palabraClave[strcspn(palabraClave, "\n")] = '\0';
-    char *resultado = BuscaNombrePorPalabra(palabraClave, arregloNombres, N);
-    if(resultado != NULL){
-        printf("Nombre encontrado: %s\n", resultado);
-    } else {
-        printf("No se encontro ningún nombre con esa palabra clave\n");
-    }
-    getchar();
-
-    // Buscar por ID
-    int num;
-    printf("\nIngrese el numero del nombre que desea buscar (0-%d): ", N-1);
-    scanf("%d", &num);
+    // Interfaz de Usuario
+    printf("\n--- Interfaz de Usuario ---\n");
+    printf("1. Buscar por palabra clave\n");
+    printf("2. Buscar por ID\n");
+    int opcion;
+    printf("Seleccione una opcion (1-2): ");
+    scanf("%d", &opcion);
     fflush(stdin);
-    BuscaNombrePorId(num, N, arregloNombres);
+    if(opcion == 1)
+    {
+        // Buscar por palabra clave
+        char palabraClave[50];
+        printf("\nIngrese la palabra clave a buscar: ");
+        fgets(palabraClave, sizeof(palabraClave), stdin);
+        palabraClave[strcspn(palabraClave, "\n")] = '\0';
+        char *resultado = BuscaNombrePorPalabra(palabraClave, arregloNombres, N);
+        if(resultado != NULL){
+            printf("Nombre encontrado: %s\n", resultado);
+        } else {
+            printf("No se encontro ningún nombre con esa palabra clave\n");
+        }
+        getchar();
+    }else
+    {
+        // Buscar por ID
+        int num;
+        printf("\nIngrese el numero del nombre que desea buscar (0-%d): ", N-1);
+        scanf("%d", &num);
+        fflush(stdin);
+        BuscaNombrePorId(num, N, arregloNombres);
 
-    for(int i = 0; i < N; i++){
-        free(arregloNombres[i]);
+        for(int i = 0; i < N; i++){
+            free(arregloNombres[i]);
+        }
     }
 
     return 0;
