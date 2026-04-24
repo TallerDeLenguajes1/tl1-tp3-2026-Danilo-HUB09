@@ -19,10 +19,12 @@ struct Cliente {
     struct Producto *Productos;
 };
 
+// iv) Calcula el costo total de un producto
 float calcularCostoProducto(struct Producto p) {
     return p.Cantidad * p.PrecioUnitario;
 }
 
+// ii) Carga un cliente con sus datos
 void cargarCliente(struct Cliente *cliente, int id) {
     char buff[50];
     cliente->ClienteID = id;
@@ -34,16 +36,19 @@ void cargarCliente(struct Cliente *cliente, int id) {
     cliente->NombreCliente = (char *) malloc(strlen(buff) + 1);
     strcpy(cliente->NombreCliente, buff);
 
-    cliente->CantidadProductosAPedir = (rand() % 10) + 1; // aleatorio entre 1 y 10
+    // iii) Cantidad de productos aleatoria entre 1 y 5
+    cliente->CantidadProductosAPedir = (rand() % 5) + 1;
     printf("Cantidad de productos asignada aleatoriamente: %d\n", cliente->CantidadProductosAPedir);
 
+    // Reservar memoria para los productos
     cliente->Productos = (struct Producto *) malloc(sizeof(struct Producto) * cliente->CantidadProductosAPedir);
 
+    // iii) Generar productos aleatoriamente
     for (int i = 0; i < cliente->CantidadProductosAPedir; i++) {
-        cliente->Productos[i].ProductoID    = i + 1;
-        cliente->Productos[i].Cantidad      = (rand() % 10) + 1;
-        cliente->Productos[i].TipoProducto  = TiposProductos[rand() % 5];
-        cliente->Productos[i].PrecioUnitario = (float)((rand() % 91) + 10);
+        cliente->Productos[i].ProductoID   = i + 1;
+        cliente->Productos[i].Cantidad     = (rand() % 10) + 1;
+        cliente->Productos[i].TipoProducto = TiposProductos[rand() % 5];
+        cliente->Productos[i].PrecioUnitario = (float)((rand() % 91) + 10); // entre 10 y 100
 
         printf("Producto cargado nro. %d\n", i + 1);
         printf("  Producto {\n");
@@ -55,6 +60,7 @@ void cargarCliente(struct Cliente *cliente, int id) {
     }
 }
 
+// v) Muestra todos los datos de un cliente y su total a pagar
 void mostrarCliente(struct Cliente c) {
     printf("\n=============================");
     printf("\nCliente ID : %d", c.ClienteID);
@@ -79,31 +85,38 @@ void mostrarCliente(struct Cliente c) {
     printf("\n=============================\n");
 }
 
+// Liberar memoria de un cliente
 void liberarCliente(struct Cliente *c) {
     free(c->NombreCliente);
     free(c->Productos);
 }
 
 int main() {
-    srand(time(NULL));
+    srand(time(NULL)); // Inicializar semilla aleatoria
 
-    // iv) El usuario indica libremente la cantidad de clientes
+    // i) Solicitar cantidad de clientes (max 5)
     int cantClientes;
-    printf("Ingrese la cantidad de clientes: ");
-    scanf("%d", &cantClientes);
-    getchar();
+    do {
+        printf("Ingrese la cantidad de clientes (1-5): ");
+        scanf("%d", &cantClientes);
+        getchar(); // limpiar \n del buffer
+    } while (cantClientes < 1 || cantClientes > 5);
 
+    // Reservar memoria para los clientes
     struct Cliente *clientes = (struct Cliente *) malloc(sizeof(struct Cliente) * cantClientes);
 
+    // ii) Cargar cada cliente
     for (int i = 0; i < cantClientes; i++) {
         cargarCliente(&clientes[i], i + 1);
     }
 
+    // v) Mostrar todo lo cargado
     printf("\n\n====== RESUMEN DE CLIENTES ======");
     for (int i = 0; i < cantClientes; i++) {
         mostrarCliente(clientes[i]);
     }
 
+    // Liberar memoria
     for (int i = 0; i < cantClientes; i++) {
         liberarCliente(&clientes[i]);
     }
