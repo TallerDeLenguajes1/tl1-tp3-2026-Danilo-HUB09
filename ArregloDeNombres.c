@@ -2,19 +2,28 @@
 #include <string.h>
 #include <stdlib.h>
 
-void cargarNombres(char **nombres){ //trabajo cn puntero doble ya que recibo la direccion de un puntero simple
-    char Buff[50]; // auxiliar para recibir los nombres que se ingresen
+void cargarNombres(char **nombres){
+    char Buff[50];
     printf("\nIngrese un nombre: ");
     fgets(Buff, sizeof(Buff), stdin);
-
-    Buff[strcspn(Buff, "\n")] = '\0'; // sirve para eliminar el \n que deja fgets
-    int aux = strlen(Buff) + 1; // +1 Porque las cadenas en C terminan con '\0' (null terminator), y strlen no lo cuenta.
+    Buff[strcspn(Buff, "\n")] = '\0';
+    int aux = strlen(Buff) + 1;
     *nombres = (char *) malloc(sizeof(char) * aux);
     strcpy(*nombres, Buff);
 }
 
 void mostrarNombres(char *nombres){
     printf("Nombre: %s\n", nombres);
+}
+
+void buscarNombre(int n, int tama, char *arregloNombres[]){
+    if(n < tama){
+        printf("\nNombre encontrado: %s\n", arregloNombres[n]);
+        getchar();
+    }else{
+        printf("\nNo se encontro el valor buscado");
+        getchar();
+    }
 }
 
 int main(){
@@ -29,7 +38,12 @@ int main(){
         getchar();
     }
 
-    // Free allocated memory
+    int num;
+    printf("\nIngrese el numero del nombre que desea buscar (0-%d): ", N-1);
+    scanf("%d", &num);
+    fflush(stdin);
+    buscarNombre(num, N, arregloNombres);
+
     for(int i = 0; i < N; i++){
         free(arregloNombres[i]);
     }
